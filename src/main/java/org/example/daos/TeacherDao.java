@@ -9,6 +9,7 @@ public interface TeacherDao {
     void update(Teacher teacher);
     void delete(Teacher teacher);
     List<Teacher> showAll();
-    void showInfo();
     Teacher getById(String output);
+    void numberOfTeachersInSchool();
+    void numberOfTeachersInCourse(int courseId);
 }

@@ -9,6 +9,5 @@ public interface ProgrammeDao {
     void update(Programme programme);
     void delete(Programme programme);
     List<Programme> showAll();
-    void showInfo();
     Programme getById(String output);
 }

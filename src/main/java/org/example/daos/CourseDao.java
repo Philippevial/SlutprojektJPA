@@ -9,6 +9,7 @@ public interface CourseDao {
     void update(Course course);
     void delete(Course course);
     List<Course> showAll();
-    void showInfo();
     Course getById(String output);
+    void numberOfCoursesInSchool();
+    void numberOfCoursesInProgramme(int Id);
 }

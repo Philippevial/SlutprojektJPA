@@ -9,6 +9,7 @@ public interface StudentDao {
     void update(Student student);
     void delete(Student student);
     List<Student> showAll();
-    void showInfo();
     Student getById(String output);
+    void numberOfStudentsInSchool();
+    void numberOfStudentsInProgramme(int progID);
 }

@@ -4,10 +4,7 @@ import org.example.daos.CourseDao;
 import org.example.entities.Course;
 import org.example.Menu;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
 
 public class CourseDaoImpl implements CourseDao {
@@ -43,20 +40,24 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public void showInfo() {
-
-    }
-
-    @Override
     public Course getById(String output) {
         int id = menu.inputReadInteger(output);
         return em.find(Course.class, id);
     }
 
-    public List<Course> numberOfCoursesInSchool() {
-        TypedQuery<Course> query = em.createQuery("SELECT c.courseID, COUNT(c)" +
-                "AS Courses FROM Course c",Course.class);
-
-        return query.getResultList();
+    @Override
+    public void numberOfCoursesInSchool() {
+        TypedQuery<Long> query = em.createQuery("SELECT COUNT(c) AS Courses FROM Course c", Long.class);
+        System.out.println("Numbers of courses in school: " + query.getResultList());
     }
+
+    @Override
+    public void numberOfCoursesInProgramme(int progId) {
+        Query query = em.createNativeQuery("SELECT COUNT(courseList_courseID) FROM programme_course" +
+               " WHERE Programme_progId = :progId");
+        query.setParameter("progId", progId);
+        System.out.println("Number of courses in programme: "+progId+" is: "+ query.getResultList());
+    }
+
+
 }

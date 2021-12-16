@@ -2,7 +2,6 @@ package org.example.daoimplementations;
 
 import org.example.*;
 import org.example.daos.ProgrammeDao;
-import org.example.daos.StudentDao;
 import org.example.entities.Programme;
 
 import javax.persistence.EntityManager;
@@ -43,10 +42,7 @@ public class ProgrammeDaoImpl implements ProgrammeDao {
         return em.createQuery("SELECT p FROM Programme p", Programme.class).getResultList();
     }
 
-    @Override
-    public void showInfo() {
 
-    }
 
     @Override
     public Programme getById(String output) {

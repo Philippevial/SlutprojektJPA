@@ -4,10 +4,7 @@ import org.example.Menu;
 import org.example.daos.StudentDao;
 import org.example.entities.Student;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
 
 public class StudentDaoImpl implements StudentDao {
@@ -46,11 +43,6 @@ public class StudentDaoImpl implements StudentDao {
             return query.getResultList();
     }
 
-    @Override
-    public void showInfo() {
-
-    }
-
 
     @Override
     public Student getById(String output) {
@@ -58,28 +50,16 @@ public class StudentDaoImpl implements StudentDao {
         return em.find(Student.class, id);
     }
 
-    public Student personInfoInput() {
-        Menu menu = new Menu();
-        Student student = new Student();
-
-        student.setFirstName(menu.inputReadString("First name: "));
-        student.setLastName(menu.inputReadString("Last name: "));
-        student.setSsn(menu.inputReadString("ssn(12 numbers): "));
-
-        while (student.getSsn().length() != 12)
-            student.setSsn(menu.inputReadString("Wrong input try again"));
-        return student;
+    @Override
+    public void numberOfStudentsInSchool() {
+        TypedQuery<Long> query = em.createQuery("SELECT COUNT(s) AS Students FROM Student s", Long.class);
+        System.out.println("Number of students in school: " + query.getResultList());
     }
 
-    public Student updateInfo() {
-        Menu menu = new Menu();
-
-        Student newStudent = getById("Enter student ID to update values: ");
-        newStudent.setFirstName(menu.inputReadString("Firstname: "));
-        newStudent.setLastName(menu.inputReadString("Lastname: "));
-        newStudent.setSsn(menu.inputReadString("SSN: "));
-
-        return newStudent;
+    @Override
+    public void numberOfStudentsInProgramme(int progID) {
+        Query query = em.createNativeQuery("SELECT COUNT(studentList_studentId) FROM programme_student WHERE Programme_progId = :progID");
+        query.setParameter("progID", progID);
+        System.out.println("Number of students in programme: "+ progID +" is: "+ query.getResultList());
     }
-
 }
