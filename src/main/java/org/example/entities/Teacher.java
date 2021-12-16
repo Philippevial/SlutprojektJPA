@@ -1,12 +1,9 @@
-package org.example;
-
-import org.example.daos.TeacherDao;
+package org.example.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.sql.Date;
 
 @Entity
 public class Teacher {
@@ -25,6 +22,10 @@ public class Teacher {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ssn = ssn;
+    }
+
+    public int getTeacherID() {
+        return teacherID;
     }
 
     public String getFirstName() {
@@ -51,15 +52,7 @@ public class Teacher {
         this.ssn = ssn;
     }
 
-    public Teacher personInfoInput() {
-        Menu menu = new Menu();
 
-        firstName = menu.inputReadString("First name: ");
-        lastName = menu.inputReadString("Last name: ");
-        ssn = menu.inputReadString("SSN(12 numbers): ");
-
-        return new Teacher(firstName,lastName,ssn);
-    }
 
     @Override
     public String toString() {
@@ -71,16 +64,5 @@ public class Teacher {
                 '}';
     }
 
-    public Teacher updateInfo() {
-            TeacherDao teacherDao = new TeacherDao();
-            Menu menu = new Menu();
 
-            Teacher newTeacher = teacherDao.getById("Enter ID for to update values: ");
-            newTeacher.setFirstName(menu.inputReadString("First name: "));
-            newTeacher.setLastName(menu.inputReadString("Ange efternamn: "));
-            newTeacher.setSsn(menu.inputReadString("SSN: "));
-
-            return newTeacher;
-
-    }
 }

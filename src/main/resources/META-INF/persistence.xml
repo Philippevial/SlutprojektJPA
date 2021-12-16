@@ -3,10 +3,10 @@
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence" version="3.0">
     <persistence-unit name="Slutprojekt" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>org.example.Student</class>
-        <class>org.example.Teacher</class>
-        <class>org.example.Course</class>
-        <class>org.example.Programme</class>
+        <class>org.example.entities.Student</class>
+        <class>org.example.entities.Teacher</class>
+        <class>org.example.entities.Course</class>
+        <class>org.example.entities.Programme</class>
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/administration"/>
             <property name="javax.persistence.jdbc.user" value="Philippe"/>

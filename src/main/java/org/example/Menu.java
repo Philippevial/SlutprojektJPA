@@ -1,15 +1,24 @@
 package org.example;
 
-import org.example.daos.*;
+import org.example.daoimplementations.CourseDaoImpl;
+import org.example.daoimplementations.ProgrammeDaoImpl;
+import org.example.daoimplementations.StudentDaoImpl;
+import org.example.daoimplementations.TeacherDaoImpl;
+import org.example.entities.Course;
+import org.example.entities.Programme;
+import org.example.entities.Student;
+import org.example.entities.Teacher;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
 
-    StudentDao studentDao;
-    TeacherDao teacherDao;
-    CourseDao courseDao;
-    ProgrammeDao programmeDao;
+    StudentDaoImpl studentDao;
+    TeacherDaoImpl teacherDao;
+    CourseDaoImpl courseDao;
+    ProgrammeDaoImpl programmeDao;
 
     Student student;
     Teacher teacher;
@@ -37,10 +46,10 @@ public class Menu {
     }
 
     private void initializeObjects() {
-        studentDao = new StudentDao();
-        teacherDao = new TeacherDao();
-        courseDao = new CourseDao();
-        programmeDao = new ProgrammeDao();
+        studentDao = new StudentDaoImpl();
+        teacherDao = new TeacherDaoImpl();
+        courseDao = new CourseDaoImpl();
+        programmeDao = new ProgrammeDaoImpl();
 
         student = new Student();
         teacher = new Teacher();
@@ -61,29 +70,26 @@ public class Menu {
     }
 
     private void updateMenu() {
-        System.out.println("Choose category: ");
-
         menuPrint();
-        choice = inputReadInteger(" ");
+        choice = inputReadInteger("Enter your choice: ");
         switch (choice) {
-            case 1 -> studentDao.update(student.updateInfo());
-            case 2 -> teacherDao.update(teacher.updateInfo());
-            case 3 -> courseDao.update(course.updateInfo());
-            case 4 -> programmeDao.update(programme.updateInfo());
+            case 1 -> studentDao.update(updateInfo(studentDao));
+            case 2 -> teacherDao.update(updateInfo(teacherDao));
+            case 3 -> courseDao.update(updateInfo(courseDao, teacherDao));
+            case 4 -> programmeDao.update(updateInfo(courseDao, studentDao));
             case 0 -> run = false;
             default -> System.out.println("Wrong choice, try again!");
         }
     }
 
     private void addMenu() {
-        System.out.println("Choose category: ");
         menuPrint();
-        choice = inputReadInteger(" ");
+        choice = inputReadInteger("Enter category");
         switch (choice) {
-            case 1 -> studentDao.add(student.personInfoInput());
-            case 2 -> teacherDao.add(teacher.personInfoInput());
-            case 3 -> courseDao.add(course.courseInfoInput());
-            case 4 -> programmeDao.add(programme.programmeInfoInput());
+            case 1 -> studentDao.add(personInfoInput(student));
+            case 2 -> teacherDao.add(personInfoInput(teacher));
+            case 3 -> courseDao.add(courseInfoInput());
+            case 4 -> programmeDao.add(programmeInfoInput());
             case 0 -> run = false;
             default -> System.out.println("Wrong choice, try again!");
         }
@@ -101,10 +107,8 @@ public class Menu {
     }
 
     private void removeMenu() {
-        System.out.println("Choose category: ");
-
         menuPrint();
-        choice = inputReadInteger(" ");
+        choice = inputReadInteger("Enter category: ");
         switch (choice) {
             case 1 -> studentDao.delete(studentDao.getById("Student ID: "));
             case 2 -> teacherDao.delete(teacherDao.getById("Teacher ID: "));
@@ -116,9 +120,8 @@ public class Menu {
     }
 
     private void show() {
-        System.out.println("Choose category: ");
         menuPrint();
-        choice = inputReadInteger(" ");
+        choice = inputReadInteger("Enter category: ");
         switch (choice) {
             case 1 -> studentDao.showAll().forEach(System.out::println);
             case 2 -> teacherDao.showAll().forEach(System.out::println);
@@ -148,4 +151,92 @@ public class Menu {
         return scanner.next();
     }
 
+    public Course courseInfoInput() {
+        String courseName;
+        courseName = inputReadString("Course name: ");
+        List<Teacher> teacherList = new ArrayList<>();
+        teacherList.add(teacherDao.getById("Teacher ID: "));
+
+        return new Course(courseName, teacherList);
+    }
+
+    private Programme programmeInfoInput() {
+        String progName;
+        progName = inputReadString("Programme name: ");
+
+        List<Course> courseList = new ArrayList<>();
+        courseList.add(courseDao.getById("Enter course ID: "));
+
+        List<Student> studentList = new ArrayList<>();
+        studentList.add(studentDao.getById("Enter student ID: "));
+
+        return new Programme(progName, courseList, studentList);
+    }
+
+    public Course updateInfo(CourseDaoImpl courseDao, TeacherDaoImpl teacherDao) {
+
+        Course newCourse = courseDao.getById("Enter ID for to update values: ");
+        newCourse.setCourseName(inputReadString("Course name: "));
+
+        List<Teacher> teacherList = new ArrayList<>();
+        teacherList.add(teacherDao.getById("Enter teacher ID to add to the programme: "));
+        newCourse.setTeacherList(teacherList);
+
+        return newCourse;
+    }
+
+    public Programme updateInfo(CourseDaoImpl courseDao, StudentDaoImpl studentDao) {
+
+        Programme programme = programmeDao.getById("Enter ID to update programme: ");
+        programme.setProgName(inputReadString("Programme name: "));
+
+        List<Course> courseList = new ArrayList<>();
+        courseList.add(courseDao.getById("Enter course ID: "));
+        programme.setCourseList(courseList);
+
+        List<Student> studentList = new ArrayList<>();
+        studentList.add(studentDao.getById("Enter student ID: "));
+        programme.setStudentList(studentList);
+
+        return programme;
+    }
+
+    public Teacher updateInfo(TeacherDaoImpl teacherDaoImp) {
+
+        Teacher newTeacher = teacherDaoImp.getById("Enter teacher ID to update values: ");
+        newTeacher.setFirstName(inputReadString("First name: "));
+        newTeacher.setLastName(inputReadString("Ange efternamn: "));
+        newTeacher.setSsn(inputReadString("SSN: "));
+
+        return newTeacher;
+
+    }
+
+    public Student personInfoInput(Student student) {
+
+        student.setFirstName(inputReadString("First name: "));
+        student.setLastName(inputReadString("Last name: "));
+        student.setSsn(inputReadString("SSN(12 numbers): "));
+
+        return student;
+    }
+
+    public Teacher personInfoInput(Teacher teacher) {
+        teacher.setFirstName(inputReadString("First name: "));
+        teacher.setLastName(inputReadString("Last name: "));
+        teacher.setSsn(inputReadString("SSN(12 numbers): "));
+
+        return teacher;
+    }
+
+    public Student updateInfo(StudentDaoImpl studentDao) {
+
+        Student newStudent = studentDao.getById("Enter student ID for to update values: ");
+        newStudent.setFirstName(inputReadString("First name: "));
+        newStudent.setLastName(inputReadString("Ange efternamn: "));
+        newStudent.setSsn(inputReadString("SSN: "));
+
+        return newStudent;
+
+    }
 }

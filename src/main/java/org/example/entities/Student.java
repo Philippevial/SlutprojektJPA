@@ -1,6 +1,5 @@
-package org.example;
+package org.example.entities;
 
-import org.example.daos.StudentDao;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -58,17 +57,7 @@ public class Student {
         this.ssn = ssn;
     }
 
-    public Student personInfoInput() {
-        Menu menu = new Menu();
 
-        firstName = menu.inputReadString("First name: ");
-        lastName = menu.inputReadString("Last name: ");
-        ssn = menu.inputReadString("ssn(12 numbers): ");
-
-        while (ssn.length() != 12)
-            ssn = menu.inputReadString("Wrong input try again");
-        return new Student(firstName ,lastName ,ssn);
-    }
 
     @Override
     public String toString() {
@@ -80,15 +69,5 @@ public class Student {
                 '}';
     }
 
-    public Student updateInfo() {
-        StudentDao studentDao = new StudentDao();
-        Menu menu = new Menu();
 
-        Student newStudent = studentDao.getById("Enter student ID to update values: ");
-        newStudent.setFirstName(menu.inputReadString("Firstname: "));
-        newStudent.setLastName(menu.inputReadString("Lastname: "));
-        newStudent.setSsn(menu.inputReadString("SSN: "));
-
-        return newStudent;
-    }
 }

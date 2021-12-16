@@ -1,10 +1,6 @@
-package org.example;
-
-import org.example.daos.CourseDao;
-import org.example.daos.TeacherDao;
+package org.example.entities;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -51,28 +47,7 @@ public class Course {
     }
 
 
-    public Course courseInfoInput() {
-        Menu menu = new Menu();
-        TeacherDao teacherDao = new TeacherDao();
 
-        courseName = menu.inputReadString("Course name: ");
-        List<Teacher> teacherList = new ArrayList<>();
-        teacherList.add(teacherDao.getById("Teacher ID: "));
-        return new Course(courseName,teacherList);
-    }
 
-    public Course updateInfo() {
-        CourseDao courseDao = new CourseDao();
-        TeacherDao teacherDao = new TeacherDao();
-        Menu menu = new Menu();
 
-        Course newCourse = courseDao.getById("Enter ID for to update values: ");
-        newCourse.setCourseName(menu.inputReadString("Course name: "));
-
-        List<Teacher> teacherList = new ArrayList<>();
-        teacherList.add(teacherDao.getById("Skriv in id för den lärare du vill lägga till i kursen"));
-        newCourse.setTeacherList(teacherList);
-
-        return newCourse;
-    }
 }
