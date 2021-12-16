@@ -20,6 +20,7 @@ public class Menu {
     CourseDaoImpl courseDao;
     ProgrammeDaoImpl programmeDao;
 
+    Statistics statistics;
     Student student;
     Teacher teacher;
     Course course;
@@ -42,7 +43,19 @@ public class Menu {
                 1. Add
                 2. Update
                 3. Remove
-                4. Show all""");
+                4. Show all
+                5. Show specific
+                0. Shut down""");
+    }
+
+    private void menuPrint() {
+        System.out.println("""
+                1. Student
+                2. Teacher
+                3. Course
+                4. Programme
+                0. Shut down
+                """);
     }
 
     private void initializeObjects() {
@@ -51,6 +64,7 @@ public class Menu {
         courseDao = new CourseDaoImpl();
         programmeDao = new ProgrammeDaoImpl();
 
+        statistics = new Statistics();
         student = new Student();
         teacher = new Teacher();
         course = new Course();
@@ -63,10 +77,49 @@ public class Menu {
             case 2 -> updateMenu();
             case 3 -> removeMenu();
             case 4 -> show();
+            case 5 -> showSpecificMenu();
+            case 6 -> statisticsMenu();
             case 0 -> run = false;
             default -> System.out.println("Wrong choice, try again!");
         }
         return run;
+    }
+
+    private void statisticsMenu() {
+        printStatisticsChoices();
+        choice = inputReadInteger("Enter choice: ");
+        switch (choice) {
+            case 1 -> courseDao.numberOfCoursesInSchool().forEach(System.out::println);
+            /*case 2 -> courseDao.update(student.studentValuesUpdate());
+            case 3 -> studentDao.numberOfStudentsInSchool();
+            case 4 -> studentDao.numberOfStudentsInProgramme(verifyInteger("Skriv programmets id: "));
+            case 5 -> teacherDao.numberOfTeachersInSchool().forEach(System.out::println);
+            case 5 -> teacherDao.numberOfTeachersInSchool().forEach(System.out::println);*/
+            case 0 -> run = false;
+        }
+    }
+
+    private void printStatisticsChoices() {
+        System.out.println("""
+            1. Number of courses in the school
+            2. Number of courses in a programme
+            3. Number of students in the school
+            4. Number of students in a programme
+            5. Number of teachers in the school
+            6. Number of teachers in a course
+            """);
+    }
+
+    private void showSpecificMenu() {
+        menuPrint();
+        choice = inputReadInteger("Enter your choice: ");
+        switch (choice) {
+            case 1 -> System.out.println(studentDao.getById("Enter student ID to show student: "));
+            case 2 -> System.out.println(teacherDao.getById("Enter teacher ID to show teacher: "));
+            case 3 -> System.out.println(courseDao.getById("Enter course ID to show course: "));
+            case 4 -> System.out.println(programmeDao.getById("Enter program ID to show program: "));
+            default -> System.out.println("Wrong input, try again!");
+        }
     }
 
     private void updateMenu() {
@@ -95,16 +148,6 @@ public class Menu {
         }
     }
 
-
-    private void menuPrint() {
-        System.out.println("""
-                1. Student
-                2. Teacher
-                3. Course
-                4. Programme
-                0. Avsluta
-                """);
-    }
 
     private void removeMenu() {
         menuPrint();
@@ -202,13 +245,23 @@ public class Menu {
     }
 
     public Teacher updateInfo(TeacherDaoImpl teacherDaoImp) {
-
         Teacher newTeacher = teacherDaoImp.getById("Enter teacher ID to update values: ");
         newTeacher.setFirstName(inputReadString("First name: "));
         newTeacher.setLastName(inputReadString("Ange efternamn: "));
         newTeacher.setSsn(inputReadString("SSN: "));
 
         return newTeacher;
+
+    }
+
+    public Student updateInfo(StudentDaoImpl studentDao) {
+
+        Student newStudent = studentDao.getById("Enter student ID for to update values: ");
+        newStudent.setFirstName(inputReadString("First name: "));
+        newStudent.setLastName(inputReadString("Ange efternamn: "));
+        newStudent.setSsn(inputReadString("SSN: "));
+
+        return newStudent;
 
     }
 
@@ -227,16 +280,5 @@ public class Menu {
         teacher.setSsn(inputReadString("SSN(12 numbers): "));
 
         return teacher;
-    }
-
-    public Student updateInfo(StudentDaoImpl studentDao) {
-
-        Student newStudent = studentDao.getById("Enter student ID for to update values: ");
-        newStudent.setFirstName(inputReadString("First name: "));
-        newStudent.setLastName(inputReadString("Ange efternamn: "));
-        newStudent.setSsn(inputReadString("SSN: "));
-
-        return newStudent;
-
     }
 }

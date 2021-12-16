@@ -17,7 +17,6 @@ public class TeacherDaoImpl implements TeacherDao {
     Menu menu = new Menu();
 
     public TeacherDaoImpl() {
-
     }
 
     @Override

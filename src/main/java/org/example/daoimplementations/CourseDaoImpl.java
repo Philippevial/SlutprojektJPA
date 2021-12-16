@@ -7,6 +7,7 @@ import org.example.Menu;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class CourseDaoImpl implements CourseDao {
@@ -52,4 +53,10 @@ public class CourseDaoImpl implements CourseDao {
         return em.find(Course.class, id);
     }
 
+    public List<Course> numberOfCoursesInSchool() {
+        TypedQuery<Course> query = em.createQuery("SELECT c.courseID, COUNT(c)" +
+                "AS Courses FROM Course c",Course.class);
+
+        return query.getResultList();
+    }
 }
