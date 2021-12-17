@@ -16,25 +16,46 @@ public class StudentDaoImpl implements StudentDao {
     public StudentDaoImpl(){
     }
 
+    private void begin() {
+        em.getTransaction().begin();
+    }
+
+    private void commit() {
+        em.getTransaction().commit();
+    }
+
     @Override
     public void add(Student student) {
-        em.getTransaction().begin();
-        em.persist(student);
-        em.getTransaction().commit();
+        try {
+            begin();
+            em.persist(student);
+            commit();
+        } catch(Exception e ) {
+            System.out.println("Wrong input, try again!");
+        }
+
     }
 
     @Override
     public void update(Student student) {
-        em.getTransaction().begin();
-        em.merge(student);
-        em.getTransaction().commit();
+        try {
+            begin();
+            em.merge(student);
+            commit();
+        } catch (Exception e) {
+            System.out.println("Något gick fel vid inmatning av uppgifter, försök igen");
+        }
     }
 
     @Override
     public void delete(Student student) {
-        em.getTransaction().begin();
+        try {
+        begin();
         em.refresh(student);
-        em.getTransaction().commit();
+        commit();
+        } catch (Exception e) {
+            System.out.println("Wrong input, try again!");
+        }
     }
 
     @Override

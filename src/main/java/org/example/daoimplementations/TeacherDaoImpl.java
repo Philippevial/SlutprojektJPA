@@ -16,25 +16,45 @@ public class TeacherDaoImpl implements TeacherDao {
     public TeacherDaoImpl() {
     }
 
+    private void begin() {
+        em.getTransaction().begin();
+    }
+
+    private void commit() {
+        em.getTransaction().commit();
+    }
+
     @Override
     public void add(Teacher teacher) {
-        em.getTransaction().begin();
-        em.persist(teacher);
-        em.getTransaction().commit();
+        try {
+            begin();
+            em.persist(teacher);
+            commit();
+        } catch (Exception e) {
+            System.out.println("Något gick fel vid inmatning av uppgifter, försök igen");
+        }
     }
 
     @Override
     public void update(Teacher teacher) {
-        em.getTransaction().begin();
-        em.merge(teacher);
-        em.getTransaction().commit();
+        try {
+            begin();
+            em.merge(teacher);
+            commit();
+        } catch (Exception e) {
+            System.out.println("Wrong input, try again!");
+        }
     }
 
     @Override
     public void delete(Teacher teacher) {
-        em.getTransaction().begin();
-        em.remove(teacher);
-        em.getTransaction().commit();
+        try {
+            begin();
+            em.refresh(teacher);
+            commit();
+        } catch (Exception e) {
+            System.out.println("Wrong input, try again!");
+        }
     }
 
     @Override

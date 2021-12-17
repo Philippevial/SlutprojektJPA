@@ -140,8 +140,8 @@ public class Menu {
         menuPrint();
         choice = inputReadInteger("Enter category");
         switch (choice) {
-            case 1 -> studentDao.add(personValues(student));
-            case 2 -> teacherDao.add(personValues(teacher));
+            case 1 -> studentDao.add(studentValues());
+            case 2 -> teacherDao.add(teacherValues());
             case 3 -> courseDao.add(courseValues());
             case 4 -> programmeDao.add(programmeValues());
             case 0 -> run = false;
@@ -205,13 +205,13 @@ public class Menu {
 
     }
 
-    public Student personValues(Student student) {
+    public Student studentValues() {
 
-        student.setFirstName(inputReadString("Enter First name: "));
-        student.setLastName(inputReadString("Enter Last name: "));
-        student.setSsn(inputReadString("Enter SSN(12 numbers): "));
+        String firstName = inputReadString("Enter First name: ");
+        String lastName = inputReadString("Enter Last name: ");
+        String ssn = inputReadString("Enter SSN(12 numbers): ");
 
-        return student;
+        return new Student(firstName, lastName, ssn);
     }
 
     public Teacher teacherInfo() {
@@ -223,12 +223,12 @@ public class Menu {
         return teacher;
     }
 
-    public Teacher personValues(Teacher teacher) {
-        teacher.setFirstName(inputReadString("Enter First name: "));
-        teacher.setLastName(inputReadString("Enter Last name: "));
-        teacher.setSsn(inputReadString("Enter SSN(12 numbers): "));
+    public Teacher teacherValues() {
+        String firstName = inputReadString("Enter First name: ");
+        String lastName = inputReadString("Enter Last name: ");
+        String ssn = inputReadString("Enter SSN(12 numbers): ");
 
-        return teacher;
+        return new Teacher(firstName, lastName, ssn);
     }
 
     public Course courseInfo() {
@@ -240,12 +240,9 @@ public class Menu {
     }
 
     public Course courseValues() {
-        String courseName;
-        courseName = inputReadString("Enter Course name: ");
-        List<Teacher> teacherList = new ArrayList<>();
-        teacherList.add(teacherDao.getById("Enter Teacher ID: "));
 
-        return new Course(courseName, teacherList);
+        String courseName = inputReadString("Enter Course name: ");
+        return new Course(courseName, createTeacherList());
     }
 
     public Programme programmeInfo() {
@@ -259,13 +256,8 @@ public class Menu {
     }
 
     private Programme programmeValues() {
-
-        programme.setProgName(inputReadString("Enter a programme name: "));
-        programme.setCourseList(createCourseList());
-        programme.setStudentList(createStudentList());
-
-
-        return programme;
+        String progName = inputReadString("Enter a programme name: ");
+        return new Programme(progName, createCourseList(), createStudentList());
     }
 
     private List<Student> createStudentList() {

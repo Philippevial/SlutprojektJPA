@@ -16,25 +16,45 @@ public class ProgrammeDaoImpl implements ProgrammeDao {
 
     Menu menu = new Menu();
 
+    private void begin() {
+        em.getTransaction().begin();
+    }
+
+    private void commit() {
+        em.getTransaction().commit();
+    }
+
     @Override
     public void add(Programme programme) {
-        em.getTransaction().begin();
-        em.persist(programme);
-        em.getTransaction().commit();
+        try {
+            begin();
+            em.persist(programme);
+            commit();
+        } catch (Exception e) {
+            System.out.println("Något gick fel vid inmatning av uppgifter, försök igen");
+        }
     }
 
     @Override
     public void update(Programme programme) {
-        em.getTransaction().begin();
-        em.merge(programme);
-        em.getTransaction().commit();
+        try {
+            begin();
+            em.merge(programme);
+            commit();
+        } catch (Exception e) {
+            System.out.println("Wrong input, try again!");
+        }
     }
 
     @Override
     public void delete(Programme programme) {
-        em.getTransaction().begin();
-        em.remove(programme);
-        em.getTransaction().commit();
+        try {
+            begin();
+            em.refresh(programme);
+            commit();
+        } catch (Exception e) {
+            System.out.println("Wrong input, try again!");
+        }
     }
 
     @Override

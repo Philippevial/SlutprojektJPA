@@ -13,25 +13,45 @@ public class CourseDaoImpl implements CourseDao {
 
     Menu menu = new Menu();
 
+    private void begin() {
+        em.getTransaction().begin();
+    }
+
+    private void commit() {
+        em.getTransaction().commit();
+    }
+
     @Override
     public void add(Course course) {
-        em.getTransaction().begin();
-        em.persist(course);
-        em.getTransaction().commit();
+        try {
+            begin();
+            em.persist(course);
+            commit();
+        } catch (Exception e) {
+            System.out.println("Något gick fel vid inmatning av uppgifter, försök igen");
+        }
     }
 
     @Override
     public void update(Course course) {
-        em.getTransaction().begin();
-        em.merge(course);
-        em.getTransaction().commit();
+        try {
+            begin();
+            em.merge(course);
+            commit();
+        } catch (Exception e) {
+            System.out.println("Wrong input, try again!");
+        }
     }
 
     @Override
     public void delete(Course course) {
-        em.getTransaction().begin();
-        em.remove(course);
-        em.getTransaction().commit();
+        try {
+            begin();
+            em.refresh(course);
+            commit();
+        } catch (Exception e) {
+            System.out.println("Wrong input, try again!");
+        }
     }
 
     @Override
