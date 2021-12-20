@@ -31,7 +31,7 @@ public class TeacherDaoImpl implements TeacherDao {
             em.persist(teacher);
             commit();
         } catch (Exception e) {
-            System.out.println("Något gick fel vid inmatning av uppgifter, försök igen");
+            System.out.println("Wrong input, try again!");
         }
     }
 

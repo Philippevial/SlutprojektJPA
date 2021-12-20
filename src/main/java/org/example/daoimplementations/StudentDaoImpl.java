@@ -43,7 +43,7 @@ public class StudentDaoImpl implements StudentDao {
             em.merge(student);
             commit();
         } catch (Exception e) {
-            System.out.println("Något gick fel vid inmatning av uppgifter, försök igen");
+            System.out.println("Wrong input, try again!");
         }
     }
 
